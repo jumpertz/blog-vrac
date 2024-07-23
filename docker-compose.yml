@@ -1,0 +1,27 @@
+services:
+  api:
+    container_name: blog-api
+    image: node:22-alpine
+    user: node
+    working_dir: /home/node
+    env_file: .env
+    ports:
+      - "${PORT:-4000}:4000"
+    volumes:
+      - .:/home/node
+    command: /bin/sh -c "npm i && npm run start:dev"
+  
+  db:
+    container_name: blog-db
+    image: postgres:16-alpine
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: blog_db
+    volumes:
+      - blog-db-data:/var/lib/postgresql/data:rw
+
+volumes:
+  blog-db-data: {}
